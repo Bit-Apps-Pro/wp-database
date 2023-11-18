@@ -4,6 +4,8 @@ namespace BitApps\WPDatabase;
 
 use Closure;
 
+use DateTime;
+use DateTimeZone;
 use Exception;
 
 class QueryBuilder
@@ -1227,6 +1229,32 @@ class QueryBuilder
     }
 
     /**
+     * Helper function, to get current timestamp
+     *
+     * @return string
+     */
+    protected function currentTimestamp()
+    {
+        if (\function_exists('wp_timezone_string')) {
+            $timezoneString = wp_timezone_string();
+        } elseif (!($timezoneString = get_option('timezone_string'))) {
+            $offset  = (float) get_option('gmt_offset');
+            $hours   = (int) $offset;
+            $minutes = ($offset - $hours);
+
+            $sign    = ($offset < 0) ? '-' : '+';
+            $absHour = abs($hours);
+            $absMins = abs($minutes * 60);
+
+            $timezoneString = sprintf('%s%02d:%02d', $sign, $absHour, $absMins);
+        }
+
+        $dateTime = new DateTime('now', new DateTimeZone($timezoneString));
+
+        return $dateTime->format(self::TIME_FORMAT);
+    }
+
+    /**
      * Run bulk insert query
      *
      * @param array $attributes
@@ -1252,7 +1280,7 @@ class QueryBuilder
         foreach ($attributes as $row) {
             ksort($row);
             if ($createdAt) {
-                $row['created_at'] = date(self::TIME_FORMAT);
+                $row['created_at'] = $this->currentTimestamp();
             }
 
             $rowValues = array_values($row);
@@ -1388,11 +1416,11 @@ class QueryBuilder
 
         if (property_exists($this->_model, 'timestamps') && $this->_model->timestamps) {
             if (!$isUpdate) {
-                $this->_model->setAttribute('created_at', date(self::TIME_FORMAT));
+                $this->_model->setAttribute('created_at', $this->currentTimestamp());
                 $columnsToPrepare[] = 'created_at';
             }
 
-            $this->_model->setAttribute('updated_at', date(self::TIME_FORMAT));
+            $this->_model->setAttribute('updated_at', $this->currentTimestamp());
             $columnsToPrepare[] = 'updated_at';
         }
 
@@ -1487,7 +1515,7 @@ class QueryBuilder
     private function prepareDelete()
     {
         if (property_exists($this->_model, 'soft_deletes') && $this->_model->soft_deletes) {
-            return $this->update(['deleted_at' => date(self::TIME_FORMAT)])->prepareUpdate();
+            return $this->update(['deleted_at' => $this->currentTimestamp()])->prepareUpdate();
         }
 
         $sql = 'DELETE FROM ' . $this->table;
