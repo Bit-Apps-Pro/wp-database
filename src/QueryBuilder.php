@@ -973,7 +973,9 @@ class QueryBuilder
             $sql = $this->{'prepare' . $this->_method}();
         }
 
-        return empty($this->bindings) ? $sql : Connection::prepare($sql, $this->bindings);
+        return empty($this->bindings)
+         || strpos($sql, '%s') === false
+         ? $sql : Connection::prepare($sql, $this->bindings);
     }
 
     /**
@@ -1014,7 +1016,7 @@ class QueryBuilder
                 $sql .= $this->prepareValueForWhere($clause, $this);
             }
 
-            $sql = $this->removeLeadingbool($sql);
+            $sql = $this->removeLeadingBool($sql);
         }
 
         return $sql;
@@ -1079,7 +1081,7 @@ class QueryBuilder
      *
      * @return string
      */
-    protected function removeLeadingbool($sql)
+    protected function removeLeadingBool($sql)
     {
         return preg_replace('/and |or /i', '', $sql, 1);
     }
@@ -1213,7 +1215,15 @@ class QueryBuilder
      */
     protected function getValueType($value)
     {
-        return (\gettype($value) == 'integer') ? '%d' : ((\gettype($value) == 'double') ? '%f' : '%s');
+        $placeHolder = '%s';
+
+        if (\gettype($value) == 'integer') {
+            $placeHolder = '%d';
+        } elseif (\gettype($value) == 'double') {
+            $placeHolder = '%f';
+        }
+
+        return $placeHolder;
     }
 
     /**
