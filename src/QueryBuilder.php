@@ -976,7 +976,7 @@ class QueryBuilder
         }
 
         return empty($this->bindings)
-         || strpos($sql, '%s') === false
+         || strpos($sql, '%') === false
          ? $sql : Connection::prepare($sql, $this->bindings);
     }
 
