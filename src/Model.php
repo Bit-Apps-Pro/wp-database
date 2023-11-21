@@ -342,7 +342,7 @@ abstract class Model implements ArrayAccess, JsonSerializable
 
     public function getInstanceFromBuilder($result, $setAttribute = false)
     {
-        if (!\is_array($result) || \count($result) == 0) {
+        if (!\is_array($result)) {
             return false;
         }
 
