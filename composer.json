@@ -1,8 +1,23 @@
 {
   "name": "bitapps/wp-database",
-  "version": "1.0.0",
-  "description": "A wpdb wrapper",
-  "license": "gpl-2",
+  "description": "A simple orm with wpdb",
+  "license": "GPL-2.0-or-later",
+  "type": "library",
+  "keywords": [
+    "wpdb",
+    "database",
+    "WordPress"
+  ],
+  "support": {
+    "issues": "https://github.com/Bit-Apps-Pro/wp-database/issues",
+    "source": "https://github.com/Bit-Apps-Pro/wp-database"
+  },
+  "authors": [
+    {
+      "email": "developer@bitcode.pro",
+      "name": "Bit-Code-Developer"
+    }
+  ],
   "archive": {
     "exclude": [
       ".gitattributes",
@@ -11,6 +26,9 @@
       ".php-cs-fixer.php",
       "composer.lock"
     ]
+  },
+  "require": {
+    "php": "^7.4 || ^8.0"
   },
   "autoload": {
     "psr-4": {
@@ -27,9 +45,16 @@
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
     "phpcompatibility/phpcompatibility-wp": "*"
   },
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.x-dev"
+    }
+  },
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
-  }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }
