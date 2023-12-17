@@ -904,6 +904,26 @@ class QueryBuilder
         return \is_array($result) && !empty($result[0]->count) ? $result[0]->count : null;
     }
 
+    public function max($column)
+    {
+        $this->select  = ['MAX(' . $column . ') as max'];
+        $this->_method = 'Select';
+        $result        = $this->exec();
+        unset($this->select);
+
+        return \is_array($result) && !empty($result[0]->max) ? $result[0]->max : null;
+    }
+
+    public function min($column)
+    {
+        $this->select  = ['MIN(' . $column . ') as min'];
+        $this->_method = 'Select';
+        $result        = $this->exec();
+        unset($this->select);
+
+        return \is_array($result) && !empty($result[0]->min) ? $result[0]->min : null;
+    }
+
     public function delete()
     {
         $this->_method = self::DELETE;
