@@ -1449,7 +1449,7 @@ class QueryBuilder
             if (isset($attributes[$column])) {
                 $this->bindings[] = \is_array($this->_model->{$column})
                 || \is_object($this->_model->{$column})
-                ? json_encode($this->_model->{$column}) : $this->_model->{$column};
+                ? wp_json_encode($this->_model->{$column}) : $this->_model->{$column};
             } else {
                 $this->bindings[] = '';
             }
