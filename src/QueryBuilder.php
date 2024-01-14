@@ -995,9 +995,12 @@ class QueryBuilder
             $sql = $this->{'prepare' . $this->_method}();
         }
 
-        return empty($this->bindings)
+        $sql = empty($this->bindings)
          || strpos($sql, '%') === false
          ? $sql : Connection::prepare($sql, $this->bindings);
+         
+         return str_replace("''",'NULL', $sql);
+
     }
 
     /**
