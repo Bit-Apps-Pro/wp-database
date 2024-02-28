@@ -1,2 +1,3 @@
 .gitignore merge=ours
 * text eol=lf
+.vscode export-ingore
