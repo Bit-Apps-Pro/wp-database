@@ -1,4 +1,4 @@
 .gitignore merge=ours
 * text eol=lf
-/.vscode export-ingore
+/.vscode       export-ignore
 lefthook.yml export-ignore
