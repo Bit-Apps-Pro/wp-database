@@ -25,7 +25,7 @@
       "lefthook.yml",
       ".php-cs-fixer.php",
       "composer.lock",
-      ".vscode"
+      ".vscode/*"
     ]
   },
   "require": {
