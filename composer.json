@@ -24,7 +24,8 @@
       ".gitignore",
       "lefthook.yml",
       ".php-cs-fixer.php",
-      "composer.lock"
+      "composer.lock",
+      ".vscode"
     ]
   },
   "require": {
