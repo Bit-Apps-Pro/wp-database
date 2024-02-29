@@ -98,6 +98,11 @@ trait Relations
         return $model->newQuery();
     }
 
+    /**
+     * Returns list of query of relations
+     *
+     * @return array<string, QueryBuilder>
+     */
     public function getRelations()
     {
         return $this->_relations;
@@ -146,21 +151,13 @@ trait Relations
                         . $parentQuery->select($relationKey['localKey'])->prepare()
                         . ') AS subquery )'
                 );
-                if ($relationQuery->getModel()->getRelateAs() == 'oneToOne') {
-                    $relatedModels = $relationQuery->first();
-                } else {
-                    $relatedModels = $relationQuery->get();
-                }
+
+                $relatedModels = $relationQuery->get();
 
                 if ($relatedModels) {
-                    if ($relatedModels instanceof Model) {
-                        $this->_relatedData[$relationName][$relatedModels->getAttribute($relationKey['foreignKey'])]
-                            = $relatedModels;
-                    } else {
-                        foreach ($relatedModels as $relatedModel) {
-                            $this->_relatedData[$relationName][$relatedModel->getAttribute($relationKey['foreignKey'])][]
-                                = $relatedModel;
-                        }
+                    foreach ($relatedModels as $relatedModel) {
+                        $this->_relatedData[$relationName][$relatedModel->getAttribute($relationKey['foreignKey'])][]
+                            = $relatedModel;
                     }
                 }
             }
@@ -178,6 +175,11 @@ trait Relations
                 $data = isset(
                     $this->_relatedData[$relationName][$model->getAttribute($relationKey['localKey'])]
                 ) ? $this->_relatedData[$relationName][$model->getAttribute($relationKey['localKey'])] : null;
+
+                if ($relationQuery->getModel()->getRelateAs() === 'oneToOne' && is_countable($data) && \count($data)) {
+                    $data = $data[0];
+                }
+
                 $model->setAttribute($relationName, $data);
             }
         }
