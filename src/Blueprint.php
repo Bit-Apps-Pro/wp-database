@@ -129,6 +129,13 @@ class Blueprint
         throw new RuntimeException("Undefined method [  {$method}  ] called on Blueprint");
     }
 
+    public function withPrefix($prefix)
+    {
+        $this->table = "{$prefix}{$this->table}";
+
+        return $this;
+    }
+
     public function build()
     {
         return $this->toSql();
@@ -730,7 +737,8 @@ class Blueprint
                 $query .= ' ADD ';
             }
 
-            $query .= (isset($indexColumn['type']) ? $indexColumn['type'] : null
+            $query .= (
+                isset($indexColumn['type']) ? $indexColumn['type'] : null
             ) . "INDEX {$indexColumn['name']}_INDEX ({$indexColumn['name']} ASC)";
         }
 
