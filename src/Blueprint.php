@@ -753,7 +753,7 @@ class Blueprint
 
         $query = '';
         foreach ($this->uniqueIndex as $key => $uniqueColumn) {
-            $query .= "\nUNIQUE INDEX {$uniqueColumn}_UNIQUE ({$uniqueColumn} ASC) VISIBLE,";
+            $query .= "\nUNIQUE INDEX {$uniqueColumn}_UNIQUE ({$uniqueColumn} ASC),";
         }
 
         return $query;
