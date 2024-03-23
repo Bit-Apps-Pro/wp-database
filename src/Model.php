@@ -272,6 +272,11 @@ abstract class Model implements ArrayAccess, JsonSerializable
         return $this->table;
     }
 
+    public function getPrefix()
+    {
+        return $this->prefix === '' ? Connection::getPrefix() : $this->prefix;
+    }
+
     public function getTableWithoutPrefix()
     {
         return $this->_tableWithoutPrefix;
