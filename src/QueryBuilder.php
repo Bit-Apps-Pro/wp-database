@@ -1312,6 +1312,12 @@ class QueryBuilder
                     ', ',
                     array_map(
                         function ($value) {
+
+                            if (\is_null($value)) {
+                                return 'NULL';
+                            }
+
+
                             $this->bindings[] = $value;
 
                             return $this->getValueType($value);
@@ -1453,7 +1459,9 @@ class QueryBuilder
                 $this->bindings[] = \is_array($this->_model->{$column})
                 || \is_object($this->_model->{$column})
                 ? wp_json_encode($this->_model->{$column}) : $this->_model->{$column};
-            } else {
+            }  elseif (\is_null($this->_model->{$column})) {
+                $this->bindings[] = null;
+            }else {
                 $this->bindings[] = '';
             }
         }
@@ -1497,10 +1505,17 @@ class QueryBuilder
             . implode(
                 ', ',
                 array_map(
-                    function ($value) {
+                    function ($value, $key) {
+                        if (\is_null($value)) {
+                            unset($this->bindings[$key]);
+
+                            return 'NULL';
+                        }
+
                         return $this->getValueType($value);
                     },
-                    $this->bindings
+                    $this->bindings,
+                    array_keys($this->bindings)
                 )
             ) . ')';
 
@@ -1519,7 +1534,15 @@ class QueryBuilder
         $sql .= ' SET ';
         $columnCount = \count($this->update);
         foreach ($this->update as $key => $column) {
-            $sql .= $column . ' = ' . $this->getValueType($this->bindings[$key]);
+            // $sql .= $column . ' = ' . $this->getValueType($this->bindings[$key]);
+
+            if (\is_null($this->bindings[$key])) {
+                $sql .= $column . ' = NULL';
+                unset($this->bindings[$key]);
+            } else {
+                $sql .= $column . ' = ' . $this->getValueType($this->bindings[$key]);
+            }
+
             if ($key < $columnCount - 1) {
                 $sql .= ', ';
             }
