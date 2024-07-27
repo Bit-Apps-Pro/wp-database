@@ -437,6 +437,10 @@ abstract class Model implements ArrayAccess, JsonSerializable
 
     private function castTo($column, $value)
     {
+        if (\is_null($value)) {
+            return $value;
+        }
+
         if (
             !isset($this->casts)
             || (isset($this->casts) && !isset($this->casts[$column]))
