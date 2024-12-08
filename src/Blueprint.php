@@ -443,14 +443,12 @@ class Blueprint
 
     public function foreign($ref, $refCol, $prefix = null)
     {
-        $newPrefix = $prefix ?? $this->_prefix;
-
-        $ref = $newPrefix . $ref;
+        $prefix = $prefix ?? $this->_prefix;
 
         $this->fkID = \count($this->foreignKeys);
         $this->foreignKeys[] = [
             'column'  => $this->columns[$this->columnIndex]['name'],
-            'ref'     => $ref,
+            'ref'     =>  $prefix . $ref,
             'ref_col' => $refCol,
         ];
 
