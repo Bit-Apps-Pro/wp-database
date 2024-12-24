@@ -465,16 +465,10 @@ class QueryBuilder
     public function paginate($pageNo = 0, $perPage = 10)
     {
         $offset = ($pageNo > 1) ? ($pageNo * $perPage) - $perPage : 0;
+                
+        $data =  $this->take($perPage)->skip($offset)->get($this->select ?? ['*']);
 
-        $totalItems = (int) $this->count();
-
-        $this->take($perPage)->skip($offset);
-
-        $this->getLimit();
-
-        $this->getOffset();
-
-        $data = $this->get();
+        $totalItems = (int) $this->count(); 
 
         $pages = ceil($totalItems / $perPage);
 
