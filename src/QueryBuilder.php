@@ -464,11 +464,13 @@ class QueryBuilder
      */
     public function paginate($pageNo = 0, $perPage = 10)
     {
-        $offset = ($pageNo > 1) ? ($pageNo * $perPage) - $perPage : 0;
-                
-        $data =  $this->take($perPage)->skip($offset)->get($this->select ?? ['*']);
+        $selectedColumns = $this->select ?? ['*'];
 
         $totalItems = (int) $this->count(); 
+
+        $offset = ($pageNo > 1) ? ($pageNo * $perPage) - $perPage : 0;
+                
+        $data =  $this->take($perPage)->skip($offset)->get($selectedColumns);
 
         $pages = ceil($totalItems / $perPage);
 
