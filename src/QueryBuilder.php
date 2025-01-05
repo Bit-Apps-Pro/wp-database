@@ -464,7 +464,7 @@ class QueryBuilder
      */
     public function paginate($pageNo = 0, $perPage = 10)
     {
-        $selectedColumns = $this->select ?? ['*'];
+        $selectedColumns = empty($this->select) ? ['*'] : $this->select;
 
         $totalItems = (int) $this->count(); 
 
