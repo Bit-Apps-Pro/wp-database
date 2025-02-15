@@ -1368,7 +1368,7 @@ class QueryBuilder
     private function prepareColumnForWhere($clause)
     {
         if (isset($clause['column'])) {
-            return ' ' . sanitize_key($clause['column']);
+            return ' ' . $clause['column'];
         }
     }
 
